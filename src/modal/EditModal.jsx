@@ -9,14 +9,23 @@ class EditModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fullName: "",
-      email: "",
-      phoneNumber: ""
+      fullName: props.fullName,
+      email: props.email,
+      phoneNumber: props.phoneNumber
     };
+    console.log(props.fullName);
     this.handleChangeFullName = this.handleChangeFullName.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePhoneNumber = this.handleChangePhoneNumber.bind(this);
     this.editAccount = this.editAccount.bind(this);
+  }
+
+  componentWillReceiveProps() {
+    this.setState({
+      fullName: this.props.fullName,
+      email: this.props.email,
+      phoneNumber: this.props.phoneNumber
+    });
   }
 
   handleChangeFullName(event) {
@@ -46,6 +55,7 @@ class EditModal extends React.Component {
   editAccount(event) {
     event.preventDefault();
     let id = window.localStorage.id;
+    console.log(this.state);
     axios({
       url: `${API_URL}/accounts/${id}`,
       method: "PUT",
@@ -59,6 +69,7 @@ class EditModal extends React.Component {
       }
     })
       .then(res => {
+        console.log(res.data);
         this.props.toggle();
       })
       .catch(error => {
@@ -67,10 +78,6 @@ class EditModal extends React.Component {
   }
 
   render() {
-    const enabled =
-      this.state.fullName.length > 0 &&
-      this.state.email.length > 0 &&
-      this.state.phoneNumber.length > 0;
     const defaultValues = {
       fullName: this.props.fullName,
       email: this.props.email,
@@ -130,11 +137,7 @@ class EditModal extends React.Component {
             </AvForm>
           </ModalBody>
           <ModalFooter>
-            <Button
-              color="primary"
-              onClick={this.editAccount}
-              disabled={!enabled}
-            >
+            <Button color="primary" onClick={this.editAccount}>
               Update
             </Button>
           </ModalFooter>
