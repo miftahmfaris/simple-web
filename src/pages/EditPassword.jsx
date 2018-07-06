@@ -1,6 +1,7 @@
 import React from "react";
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import { Button } from "reactstrap";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3030";
@@ -9,43 +10,21 @@ class EditPassword extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      password: ""
+      password: "",
+      currentPassword: "",
+      retypePassword: ""
     };
-    this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.editPassword = this.editPassword.bind(this);
   }
 
-  handleChangePassword(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { password: value };
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
     });
-  }
+  };
 
-  async getDataUser() {
-    let id = window.localStorage.id;
-    await axios
-      .get(`${API_URL}/accounts/${id}`)
-      .then(res => {
-        console.log(res.data.data);
-        if (res.data.data.password === this.state.password) {
-          this.setState({
-            password: this.state.password
-          });
-          console.log(true);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
-  componentWillMount() {
-    this.getDataUser();
-  }
-
-  editPassword(event) {
+  editPassword = event => {
     event.preventDefault();
+    console.log(this.state);
     let id = window.localStorage.id;
     axios({
       url: `${API_URL}/accounts/password/${id}`,
@@ -54,22 +33,28 @@ class EditPassword extends React.Component {
         Authorization: "Bearer" + window.localStorage.token
       },
       data: {
-        password: this.state.password
+        password: this.state.password,
+        currentPassword: this.state.currentPassword
       }
     })
       .then(res => {
-        console.log(this.state.password);
         console.log(res.data);
-        // if (this.state.password !== res.data.data.password) {
-        //   console.log(false);
-        // }
+        this.props.history.push("/");
       })
       .catch(error => {
         console.log(error);
       });
-  }
+  };
+
+  cancelResetPassword = () => {
+    this.props.history.push("/profile");
+  };
 
   render() {
+    const enabled =
+      this.state.password.length >= 8 &&
+      this.state.currentPassword.length >= 8 &&
+      this.state.retypePassword.length >= 8;
     return (
       <div>
         <div className="center">
@@ -79,16 +64,16 @@ class EditPassword extends React.Component {
         <div>
           <div>
             <div className="center">
-              <div className="container">
+              <div value className="container">
                 <AvForm>
                   <AvField
                     placeholder="Old Password"
-                    name="fullName"
-                    label="Name"
+                    name="password"
+                    label="Old Password"
                     type="password"
                     pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                    onFocus={this.handleChangeFullName}
-                    onChange={this.handleChangePassword}
+                    onFocus={this.handleChange}
+                    onChange={this.handleChange}
                     validate={{
                       required: {
                         value: true,
@@ -103,10 +88,11 @@ class EditPassword extends React.Component {
                   />
                   <AvField
                     placeholder="Current Password"
-                    name="originalEmail"
-                    label="Email"
+                    name="currentPassword"
+                    label="Current Password"
                     type="password"
                     pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                    onChange={this.handleChange}
                     validate={{
                       required: {
                         value: true,
@@ -121,13 +107,14 @@ class EditPassword extends React.Component {
                   />
                   <AvField
                     placeholder="Re-type Password"
-                    name="confirmationEmail"
-                    label="Email"
+                    name="retypePassword"
+                    label="Re-Type Password"
                     type="password"
                     pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                    onChange={this.handleChange}
                     validate={{
                       match: {
-                        value: "originalEmail",
+                        value: "currentPassword",
                         errorMessage: "Your password not match"
                       },
                       required: {
@@ -148,8 +135,17 @@ class EditPassword extends React.Component {
                   size="lg"
                   block
                   onClick={this.editPassword}
+                  disabled={!enabled}
                 >
                   Update
+                </Button>
+                <Button
+                  color="danger"
+                  size="lg"
+                  block
+                  onClick={this.cancelResetPassword}
+                >
+                  Cancel
                 </Button>
               </div>
             </div>
@@ -160,4 +156,4 @@ class EditPassword extends React.Component {
   }
 }
 
-export default EditPassword;
+export default withRouter(EditPassword);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "reactstrap";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 import _ from "lodash";
 
@@ -17,18 +17,16 @@ class Profile extends React.Component {
       email: "",
       phoneNumber: ""
     };
-    this.toggle = this.toggle.bind(this);
-    this.handleSignout = this.handleSignout.bind(this);
   }
 
-  toggle() {
+  toggle = () => {
     this.getDataUser();
     this.setState({
       modal: !this.state.modal
     });
-  }
+  };
 
-  async getDataUser() {
+  getDataUser = async () => {
     let id = window.localStorage.id;
     await axios
       .get(`${API_URL}/accounts/${id}`)
@@ -42,16 +40,16 @@ class Profile extends React.Component {
       .catch(err => {
         console.log(err);
       });
-  }
+  };
 
   componentWillMount() {
     this.getDataUser();
   }
 
-  handleSignout(event) {
+  handleSignout = event => {
     localStorage.clear();
     this.props.history.push("/");
-  }
+  };
   render() {
     return (
       <div>
@@ -75,6 +73,14 @@ class Profile extends React.Component {
             getDataUser={this.getAllDataUser}
           />
         </div>
+        <div>
+          <h6 className="center margin-top-5">
+            Would you change your password?
+            <Link to="/editPassword">
+              <h6>Click Here</h6>
+            </Link>
+          </h6>
+        </div>
         <Button
           className="margin-top-20"
           color="danger"
@@ -84,6 +90,7 @@ class Profile extends React.Component {
         >
           Sign Out
         </Button>
+
       </div>
     );
   }

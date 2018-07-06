@@ -16,45 +16,17 @@ class Signup extends React.Component {
       phoneNumber: "",
       isValidEmail: true,
       isValidPhone: true,
-      isValuePassword: false,
       allData: []
     };
-    this.handleChangeFullName = this.handleChangeFullName.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.handleChangeEmail = this.handleChangeEmail.bind(this);
-    this.handleChangePhoneNumber = this.handleChangePhoneNumber.bind(this);
-    this.submitClickForm = this.submitClickForm.bind(this);
   }
 
-  handleChangeFullName(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { fullName: value };
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
     });
-  }
+  };
 
-  handleChangeEmail(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { email: value };
-    });
-  }
-
-  handleChangePassword(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { password: value };
-    });
-  }
-
-  handleChangePhoneNumber(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { phoneNumber: value };
-    });
-  }
-
-  async getAllDataUser() {
+  getAllDataUser = async () => {
     await axios
       .get(`${API_URL}/accounts`)
       .then(res => {
@@ -65,14 +37,15 @@ class Signup extends React.Component {
       .catch(err => {
         console.log(err);
       });
-  }
+  };
 
   cancelSignUp = () => {
     this.props.history.push("/");
   };
 
-  submitClickForm(event) {
+  submitClickForm = event => {
     event.preventDefault();
+    console.log(this.state.fullName);
     axios
       .post(`${API_URL}/accounts`, {
         fullName: this.state.fullName,
@@ -89,7 +62,7 @@ class Signup extends React.Component {
       .catch(error => {
         console.log(error);
       });
-  }
+  };
 
   componentWillMount() {
     this.getAllDataUser();
@@ -114,9 +87,9 @@ class Signup extends React.Component {
                 <AvForm>
                   <AvField
                     placeholder="Full Name"
-                    name="name"
+                    name="fullName"
                     label="Name"
-                    onChange={this.handleChangeFullName}
+                    onChange={this.handleChange}
                     validate={{
                       required: {
                         value: true,
@@ -129,7 +102,7 @@ class Signup extends React.Component {
                     name="email"
                     label="Email Address"
                     type="email"
-                    onChange={this.handleChangeEmail}
+                    onChange={this.handleChange}
                     validate={{
                       required: {
                         value: true,
@@ -138,12 +111,12 @@ class Signup extends React.Component {
                     }}
                   />
                   <AvField
-                    name="pattern"
+                    name="password"
                     label="Password"
                     type="password"
                     pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
                     placeholder="Password"
-                    onChange={this.handleChangePassword}
+                    onChange={this.handleChange}
                     validate={{
                       required: {
                         value: true,
@@ -158,10 +131,10 @@ class Signup extends React.Component {
                   />
                   <AvField
                     placeholder="Phone Number"
-                    name="minPropNumber"
+                    name="phoneNumber"
                     label="Phone Number"
                     type="number"
-                    onChange={this.handleChangePhoneNumber}
+                    onChange={this.handleChange}
                     validate={{
                       required: {
                         value: true,

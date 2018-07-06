@@ -13,11 +13,6 @@ class EditModal extends React.Component {
       email: props.email,
       phoneNumber: props.phoneNumber
     };
-    console.log(props.fullName);
-    this.handleChangeFullName = this.handleChangeFullName.bind(this);
-    this.handleChangeEmail = this.handleChangeEmail.bind(this);
-    this.handleChangePhoneNumber = this.handleChangePhoneNumber.bind(this);
-    this.editAccount = this.editAccount.bind(this);
   }
 
   componentWillReceiveProps() {
@@ -28,34 +23,15 @@ class EditModal extends React.Component {
     });
   }
 
-  handleChangeFullName(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { fullName: value };
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
     });
-    console.log(value);
-  }
+  };
 
-  handleChangeEmail(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { email: value };
-    });
-    console.log(value);
-  }
-
-  handleChangePhoneNumber(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { phoneNumber: value };
-    });
-    console.log(value);
-  }
-
-  editAccount(event) {
+  editAccount = event => {
     event.preventDefault();
     let id = window.localStorage.id;
-    console.log(this.state);
     axios({
       url: `${API_URL}/accounts/${id}`,
       method: "PUT",
@@ -75,7 +51,7 @@ class EditModal extends React.Component {
       .catch(error => {
         console.log(error);
       });
-  }
+  };
 
   render() {
     const defaultValues = {
@@ -97,8 +73,8 @@ class EditModal extends React.Component {
                 placeholder="Full Name"
                 name="fullName"
                 label="Name"
-                onFocus={this.handleChangeFullName}
-                onChange={this.handleChangeFullName}
+                onFocus={this.handleChange}
+                onChange={this.handleChange}
                 validate={{
                   required: {
                     value: true,
@@ -111,8 +87,8 @@ class EditModal extends React.Component {
                 name="email"
                 label="Email Address"
                 type="email"
-                onFocus={this.handleChangeEmail}
-                onChange={this.handleChangeEmail}
+                onFocus={this.handleChange}
+                onChange={this.handleChange}
                 validate={{
                   required: {
                     value: true,
@@ -120,13 +96,14 @@ class EditModal extends React.Component {
                   }
                 }}
               />
+
               <AvField
                 placeholder="Phone Number"
                 name="phoneNumber"
                 label="Phone Number"
                 type="number"
-                onFocus={this.handleChangePhoneNumber}
-                onChange={this.handleChangePhoneNumber}
+                onFocus={this.handleChange}
+                onChange={this.handleChange}
                 validate={{
                   required: {
                     value: true,
