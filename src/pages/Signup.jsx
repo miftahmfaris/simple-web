@@ -67,9 +67,13 @@ class Signup extends React.Component {
       });
   }
 
-  async submitClickForm(event) {
+  cancelSignUp = () => {
+    this.props.history.push("/");
+  };
+
+  submitClickForm(event) {
     event.preventDefault();
-    await axios
+    axios
       .post(`${API_URL}/accounts`, {
         fullName: this.state.fullName,
         email: this.state.email,
@@ -175,6 +179,14 @@ class Signup extends React.Component {
                       disabled={!enabled}
                     >
                       Sign Up
+                    </Button>
+                    <Button
+                      color="danger"
+                      size="lg"
+                      block
+                      onClick={this.cancelSignUp}
+                    >
+                      Cancel
                     </Button>
                   </FormGroup>
                 </AvForm>
