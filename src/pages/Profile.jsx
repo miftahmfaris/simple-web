@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "reactstrap";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
 import _ from "lodash";
 
@@ -74,14 +74,6 @@ class Profile extends React.Component {
             phoneNumber={this.state.phoneNumber}
             getDataUser={this.getAllDataUser}
           />
-        </div>
-        <div>
-          <h6 className="center margin-top-5">
-            Don't have an account?
-            <Link to="/editPassword">
-              <h6>Sign up here</h6>
-            </Link>
-          </h6>
         </div>
         <Button
           className="margin-top-20"
