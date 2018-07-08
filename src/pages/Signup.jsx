@@ -45,7 +45,6 @@ class Signup extends React.Component {
 
   submitClickForm = event => {
     event.preventDefault();
-    console.log(this.state.fullName);
     axios
       .post(`${API_URL}/accounts`, {
         fullName: this.state.fullName,

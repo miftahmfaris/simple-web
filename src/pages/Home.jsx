@@ -13,26 +13,15 @@ class Home extends Component {
       password: "",
       isValidPassword: true
     };
-    this.handleChangeEmail = this.handleChangeEmail.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.submitForm = this.submitForm.bind(this);
   }
 
-  handleChangeEmail(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { email: value };
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
     });
-  }
+  };
 
-  handleChangePassword(event) {
-    let value = event.target.value;
-    this.setState(() => {
-      return { password: value };
-    });
-  }
-
-  async submitForm(event) {
+  submitForm = async event => {
     event.preventDefault();
     await axios
       .post(`${API_URL}/accounts/signin`, {
@@ -52,7 +41,7 @@ class Home extends Component {
       .catch(error => {
         console.log(error.res);
       });
-  }
+  };
 
   render() {
     return (
@@ -73,7 +62,7 @@ class Home extends Component {
                     id="inputEmail"
                     placeholder="Email"
                     value={this.state.email}
-                    onChange={this.handleChangeEmail}
+                    onChange={this.handleChange}
                   />
                 </FormGroup>
                 <FormGroup>
@@ -92,7 +81,7 @@ class Home extends Component {
                     id="inputPassword"
                     placeholder="Password"
                     value={this.state.password}
-                    onChange={this.handleChangePassword}
+                    onChange={this.handleChange}
                   />
                 </FormGroup>
                 <Button outline color="secondary" size="lg" block>

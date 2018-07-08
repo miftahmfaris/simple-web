@@ -1,6 +1,6 @@
 # This is simple Web
 
-In this website you can preview your profile that you make.
+In this website you can create, preview and edit your profile that you make.
 
 ## Features
 
@@ -21,6 +21,7 @@ In this website you can preview your profile that you make.
       - Edit Fullname
       - Edit Email
       - Edit Phone Number
+      - Edit password
 4.  `Preview Profile`
 
 ## How to use in your localstorage
